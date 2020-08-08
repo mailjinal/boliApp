@@ -40,7 +40,7 @@ const days = [
   { value: 5, name: 'નોમ/દસમ-ગુરુવાર-27/08/2020' },
   { value: 6, name: 'અગિયારસ-શુક્રવાર-28/08/2020' },
   { value: 7, name: 'બારસ-શનિવાર-29/08/2020' },
-  { value: 8, name: 'બારસ-રવિવાર-30/08/2020'},
+  { value: 8, name: 'બારસ-રવિવાર-30/08/2020' },
   { value: 9, name: 'તેરસ-સોમવાર-31/08/2020' },
   { value: 10, name: 'ચૌદસ-મંગળવાર-01/09/2020' }
 ]
@@ -72,55 +72,55 @@ function App() {
   const handleChangeDay = (event) => {
     setDay(event.target.value);
     let x = _.sortBy(
-     fullData.filter(b => b.day===event.target.value && b.type === type)
+      fullData.filter(b => b.day === event.target.value && b.type === type)
       , ['amount']).reverse().slice(0, 3)
-      if(x[0]){
-        setMinAmount(x[0].amount + 500)
-        setAmount(x[0].amount + 500)
-        setData(x)
-       } else {
-        setMinAmount(0)
-        setAmount(500)
-        setData([])
-       }
+    if (x[0]) {
+      setMinAmount(x[0].amount + 500)
+      setAmount(x[0].amount + 500)
+      setData(x)
+    } else {
+      setMinAmount(0)
+      setAmount(500)
+      setData([])
+    }
   };
 
   const handleChangeType = (event) => {
     setType(event.target.value);
     let x = _.sortBy(
-      fullData.filter(b => b.day===day && b.type === event.target.value)
-       , ['amount']).reverse().slice(0, 3)
-       if(x[0]){
-        setMinAmount(x[0].amount + 500)
-        setAmount(x[0].amount + 500)
-        setData(x)
-       } else {
-        setMinAmount(0)
-        setAmount(500)
-        setData([])
-       }     
+      fullData.filter(b => b.day === day && b.type === event.target.value)
+      , ['amount']).reverse().slice(0, 3)
+    if (x[0]) {
+      setMinAmount(x[0].amount + 500)
+      setAmount(x[0].amount + 500)
+      setData(x)
+    } else {
+      setMinAmount(0)
+      setAmount(500)
+      setData([])
+    }
   };
-  
+
   const filterData = (state) => {
     let x = _.sortBy(
-      Object.keys(state).map(a => 
-        state[a]).filter(b => 
-          b.day===parseInt(document.getElementById('dayid').value) 
+      Object.keys(state).map(a =>
+        state[a]).filter(b =>
+          b.day === parseInt(document.getElementById('dayid').value)
           && b.type === parseInt(document.getElementById('typeid').value))
       , ['amount']).reverse().slice(0, 3)
-      if(x[0]){
-        setMinAmount(x[0].amount + 500)
-        setAmount(x[0].amount + 500)
-        setData(x)
-        setFullData(Object.keys(state).map(a => 
-          state[a]))
-       } else {
-        setMinAmount(0)
-        setAmount(500)
-        setData([])
-        setFullData(Object.keys(state).map(a => 
-          state[a]))
-       }
+    if (x[0]) {
+      setMinAmount(x[0].amount + 500)
+      setAmount(x[0].amount + 500)
+      setData(x)
+      setFullData(Object.keys(state).map(a =>
+        state[a]))
+    } else {
+      setMinAmount(0)
+      setAmount(500)
+      setData([])
+      setFullData(Object.keys(state).map(a =>
+        state[a]))
+    }
   }
 
   const validateUser = (name, phonenumber, amount, type, minAmount) => {
@@ -134,7 +134,7 @@ function App() {
     } else if (phonenumber.length !== 10) {
       alert('please enter your mobile number in 10 digit')
       isValid = false
-    } else if (amount%500 !== 0 || amount<minAmount) {
+    } else if (amount % 500 !== 0 || amount < minAmount) {
       alert('Please enter proper amount.')
       isValid = false
     } else if (type === '') {
@@ -163,9 +163,9 @@ function App() {
       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <input id={'dayid'} style={{display:'none'}} value={day}/>
-            <input id={'typeid'} style={{display:'none'}} value={type}/>
-            <img src={Logo} alt='chandraprabhuImge' style={{width:'80%', height:'20%'}}/>
+            <input id={'dayid'} style={{ display: 'none' }} value={day} />
+            <input id={'typeid'} style={{ display: 'none' }} value={type} />
+            <img src={Logo} alt='chandraprabhuImge' style={{ width: '80%', height: '20%' }} />
             <h3>ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
             <Grid item xs={12} sm={12}>
               <TextField
@@ -211,10 +211,10 @@ function App() {
             </Grid>
             <Grid item xs={12} sm={12} style={{ padding: 10 }}>
               <TextField id="standard-basic"
-                type='number' 
+                type='number'
                 InputProps={{
                   startAdornment: <InputAdornment position="start">₹</InputAdornment>,
-                  step:500
+                  step: 500
                 }}
                 inputProps={{ min: minAmount, step: "500" }}
                 value={amount}
@@ -228,7 +228,8 @@ function App() {
                 Boli
                 </Button>
             </Grid>
-              <p>{'બોલી:૫૦૦/- ના ગુણાંકમાં રકમ dropdown ભરવી દાખલા તરીકે ૩૦૦૦,૩૫૦૦,૪૦૦૦...,૧૦૦૦૦,૧૦૫૦૦'}</p>
+            <p>{'બોલી:૫૦૦/- ના ગુણાંકમાં રકમ dropdown ભરવી દાખલા તરીકે ૩૦૦૦,૩૫૦૦,૪૦૦૦...,૧૦૦૦૦,૧૦૫૦૦'}</p>
+            <p>#By Jinal Shah</p>
           </Paper>
         </Grid>
       </Grid>
