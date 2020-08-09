@@ -27,27 +27,27 @@ const validateUser = (name, phonenumber, amount, type, minAmount, day) => {
 const days = [{
     value: 1,
     name: 'પાંચમ-રવિવાર-23/08/2020',
-    date: '9/08/2020'
+    date: '23/08/2020'
   },
   {
     value: 2,
     name: 'છઠ-સોમવાર-24/08/2020',
-    date: '10/08/2020'
+    date: '24/08/2020'
   },
   {
     value: 3,
     name: 'સાતમ-મંગળવાર-25/08/2020',
-    date: '10/08/2020'
+    date: '25/08/2020'
   },
   {
     value: 4,
     name: 'આઠમ-બુધવાર-26/08/2020',
-    date: '11/08/2020'
+    date: '26/08/2020'
   },
   {
     value: 5,
     name: 'નોમ/દસમ-ગુરુવાર-27/08/2020',
-    date: '13/08/2020'
+    date: '27/08/2020'
   },
   {
     value: 6,
