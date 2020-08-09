@@ -13,7 +13,8 @@ import TableComponent from './component/table'
 import { writeUserData, getUserData } from './firebaseConfig/firebase'
 import _ from 'lodash'
 import Logo from './img/abc.jpeg';
-
+import moment from 'moment'
+import { validateUser, sendSMS, days, Types, Notes } from './commonFunction'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,131 +33,76 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const days = [
-  { value: 1, name: 'પાંચમ-રવિવાર-23/08/2020' },
-  { value: 2, name: 'છઠ-સોમવાર-24/08/2020' },
-  { value: 3, name: 'સાતમ-મંગળવાર-25/08/2020' },
-  { value: 4, name: 'આઠમ-બુધવાર-26/08/2020' },
-  { value: 5, name: 'નોમ/દસમ-ગુરુવાર-27/08/2020' },
-  { value: 6, name: 'અગિયારસ-શુક્રવાર-28/08/2020' },
-  { value: 7, name: 'બારસ-શનિવાર-29/08/2020' },
-  { value: 8, name: 'બારસ-રવિવાર-30/08/2020' },
-  { value: 9, name: 'તેરસ-સોમવાર-31/08/2020' },
-  { value: 10, name: 'ચૌદસ-મંગળવાર-01/09/2020' }
-]
-
-const Types = [
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-  [{ value: 0, name: 'શ્રીજી ની શાંતિધારા' }],
-]
-
 function App() {
-  const [day, setDay] = React.useState(1);
+  const [day, setDay] = React.useState('');
   const [name, setName] = React.useState('')
   const [phoneNumber, setPhoneNumber] = React.useState('')
   const [amount, setAmount] = React.useState(500)
   const [minAmount, setMinAmount] = React.useState(500)
-  const [type, setType] = React.useState(0);
+  const [type, setType] = React.useState('');
   const [data, setData] = React.useState([]);
   const [fullData, setFullData] = React.useState([])
   const classes = useStyles();
 
-  const handleChangeDay = (event) => {
-    setDay(event.target.value);
-    let x = _.sortBy(
-      fullData.filter(b => b.day === event.target.value && b.type === type)
-      , ['amount']).reverse().slice(0, 3)
-    if (x[0]) {
-      setMinAmount(x[0].amount + 500)
-      setAmount(x[0].amount + 500)
-      setData(x)
+  const handleListFilterChanges = (updatedList) => {
+    const firstElement = updatedList[0]
+    if (firstElement) {
+      const amountUpdated = firstElement.amount + 500
+      setMinAmount(amountUpdated)
+      setAmount(amountUpdated)
+      setData(updatedList)
     } else {
-      setMinAmount(0)
+      setMinAmount(500)
       setAmount(500)
       setData([])
     }
+  }
+
+  const handleChangeDay = (event) => {
+    setDay(event.target.value);
+    let x = _.sortBy(fullData.filter(b => b.day === event.target.value && b.type === type), ['amount']).reverse().slice(0, 3)
+    handleListFilterChanges(x)
   };
 
   const handleChangeType = (event) => {
     setType(event.target.value);
-    let x = _.sortBy(
-      fullData.filter(b => b.day === day && b.type === event.target.value)
-      , ['amount']).reverse().slice(0, 3)
-    if (x[0]) {
-      setMinAmount(x[0].amount + 500)
-      setAmount(x[0].amount + 500)
-      setData(x)
-    } else {
-      setMinAmount(0)
-      setAmount(500)
-      setData([])
-    }
+    let x = _.sortBy(fullData.filter(b => b.day === day && b.type === event.target.value), ['amount']).reverse().slice(0, 3)
+    handleListFilterChanges(x)
   };
 
   const filterData = (state) => {
-    let x = _.sortBy(
-      Object.keys(state).map(a =>
-        state[a]).filter(b =>
-          b.day === parseInt(document.getElementById('dayid').value)
-          && b.type === parseInt(document.getElementById('typeid').value))
-      , ['amount']).reverse().slice(0, 3)
-    if (x[0]) {
-      setMinAmount(x[0].amount + 500)
-      setAmount(x[0].amount + 500)
-      setData(x)
-      setFullData(Object.keys(state).map(a =>
-        state[a]))
-    } else {
-      setMinAmount(0)
-      setAmount(500)
-      setData([])
-      setFullData(Object.keys(state).map(a =>
-        state[a]))
-    }
-  }
-
-  const validateUser = (name, phonenumber, amount, type, minAmount) => {
-    let isValid = true;
-    if (name === '') {
-      alert('Please enter your name.')
-      isValid = false
-    } else if (phonenumber === '') {
-      alert('Please fill your phonenumber')
-      isValid = false
-    } else if (phonenumber.length !== 10) {
-      alert('please enter your mobile number in 10 digit')
-      isValid = false
-    } else if (amount % 500 !== 0 || amount < minAmount) {
-      alert('Please enter proper amount.')
-      isValid = false
-    } else if (type === '') {
-      alert('Please select type')
-      isValid = false
-    }
-    return isValid
+    const formatState = Object.keys(state).map(a => state[a])
+    let x = _.sortBy((formatState).filter(b => b.day === parseInt(document.getElementById('dayid').value) && b.type === parseInt(document.getElementById('typeid').value)), ['amount']).reverse().slice(0, 3)
+    handleListFilterChanges(x)
+    setFullData(formatState)
   }
 
   const submitBoli = () => {
-    if (validateUser(name, phoneNumber, parseInt(amount), type, minAmount)) {
-      writeUserData(name, phoneNumber, parseInt(amount), day, type)
-    } else {
-      setAmount(minAmount)
-    }
+    if (validateUser(name, phoneNumber, parseInt(amount), type, minAmount, day)) {
+      const OTP = phoneNumber.slice(-2) + Date.now().toString().slice(-2);
+      console.log(OTP)
+      // eslint-disable-next-line no-restricted-globals
+      const responseConfirm = confirm(`Do you want to add boli for Rs. ${amount}`);
+      if (responseConfirm) {
+        sendSMS()
+        let responseOTP = prompt('Please enter OTP sent to your phoneNumber.', '')
+        if (responseOTP === OTP) {
+          writeUserData(name, phoneNumber, parseInt(amount), day, type)
+          setName('')
+          setPhoneNumber('')
+        }
+      }
+    } else { setAmount(minAmount) }
   }
 
   React.useEffect(() => {
     getUserData((state) => {
       filterData(state)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const filterDay = days.filter(d => moment().add(1, 'days').isBefore(moment(d.date, 'DD/MM/YYYY')))
 
   return (
     <div className={classes.root}>
@@ -189,7 +135,7 @@ function App() {
                   id="demo-simple-select"
                   value={day}
                   onChange={handleChangeDay}
-                > {days.map(day => <MenuItem key={day.value}
+                > {filterDay.map(day => <MenuItem key={day.value}
                   value={day.value}>{day.name}</MenuItem>)}
                 </Select>
               </FormControl>
@@ -201,8 +147,10 @@ function App() {
                   value={type}
                   onChange={handleChangeType}
                 >
-                  {Types[day - 1].map(type => <MenuItem key={type.value}
-                    value={type.value}>{type.name}</MenuItem>)}
+                  {(Types[day - 1] || []).map(type =>
+                    <MenuItem key={type.value}
+                      value={type.value}>{type.name}
+                    </MenuItem>)}
                 </Select>
               </FormControl>
             </Grid>
@@ -222,14 +170,14 @@ function App() {
                 label="Amount" />
               <Button
                 style={{ margin: 10 }}
+                disabled={moment().hour() > 21 || moment().hour() < 9}
                 variant="contained"
                 color="primary"
                 onClick={() => { submitBoli() }}>
                 Boli
                 </Button>
             </Grid>
-            <p>{'બોલી:૫૦૦/- ના ગુણાંકમાં રકમ dropdown ભરવી દાખલા તરીકે ૩૦૦૦,૩૫૦૦,૪૦૦૦...,૧૦૦૦૦,૧૦૫૦૦'}</p>
-            <p>#By Jinal Shah</p>
+            {Notes.map(text => <p>{text}</p>)}
           </Paper>
         </Grid>
       </Grid>
