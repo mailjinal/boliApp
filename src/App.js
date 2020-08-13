@@ -84,13 +84,17 @@ function App() {
       // eslint-disable-next-line no-restricted-globals
       const responseConfirm = confirm(`Do you want to add boli for Rs. ${amount}`);
       if (responseConfirm) {
-        sendSMS()
-        let responseOTP = prompt('Please enter OTP sent to your phoneNumber.', '')
-        if (responseOTP === OTP) {
-          writeUserData(name, phoneNumber, parseInt(amount), day, type)
-          setName('')
-          setPhoneNumber('')
-        }
+        sendSMS(OTP, phoneNumber, () => {
+          let responseOTP = prompt(`Please enter OTP sent to your phoneNumber : ${phoneNumber}.`, '')
+          if (responseOTP === OTP) {
+            writeUserData(name, phoneNumber, parseInt(amount), day, type)
+            setName('')
+            setPhoneNumber('')
+          } else {
+            alert('Please fill your latest OTP.')
+          }
+        })
+        
       }
     } else { setAmount(minAmount) }
   }
@@ -109,8 +113,8 @@ function App() {
       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <input id={'dayid'} style={{ display: 'none' }} value={day} />
-            <input id={'typeid'} style={{ display: 'none' }} value={type} />
+            <input id={'dayid'} style={{ display: 'none' }} value={day} readOnly/>
+            <input id={'typeid'} style={{ display: 'none' }} value={type} readOnly/>
             <img src={Logo} alt='chandraprabhuImge' style={{ width: '80%', height: '20%' }} />
             <h3>ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
             <Grid item xs={12} sm={12}>
@@ -123,7 +127,7 @@ function App() {
                 type="number"
                 style={{ marginLeft: 10 }}
                 id="standard-basic"
-                label="Phone No(10 Digit)"
+                label="Phone No(only 10 Digit)"
                 value={phoneNumber}
                 onChange={e => { setPhoneNumber(e.target.value) }} />
             </Grid>
@@ -170,14 +174,14 @@ function App() {
                 label="Amount" />
               <Button
                 style={{ margin: 10 }}
-                disabled={moment().hour() > 21 || moment().hour() < 9}
+                // disabled={moment().hour() > 21 || moment().hour() < 9}
                 variant="contained"
                 color="primary"
                 onClick={() => { submitBoli() }}>
                 Boli
                 </Button>
             </Grid>
-            {Notes.map(text => <p>{text}</p>)}
+            {Notes.map((text,i) => <p key={i}>{text}</p>)}
           </Paper>
         </Grid>
       </Grid>

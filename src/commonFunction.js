@@ -143,14 +143,15 @@ const Notes = [
   '#By Jinal Shah'
 ]
 
-const sendSMS = (code) => {
+const sendSMS = (OTP, phonenumber, callback) => {
   return new Promise((resolve, reject) => {
-    return axios.get('')
+    return axios.get(`https://2factor.in/API/V1/1c34d19e-db07-11ea-9fa5-0200cd936042/SMS/+91${phonenumber}/${OTP}/boli_app`)
       .then(res => {
-
+        callback()
+        console.log(`OTP ${OTP} is sent to phonenumber ${phonenumber}`)
       })
       .catch(err => {
-
+        console.log(`FAIL: OTP ${OTP} is not sent to phonenumber ${phonenumber}`, err.toString())
       })
   })
 }
