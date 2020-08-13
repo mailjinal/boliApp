@@ -2,8 +2,9 @@ import axios from 'axios';
 
 const validateUser = (name, phonenumber, amount, type, minAmount, day) => {
   let isValid = true;
-  if (name === '') {
-    alert('Please enter your name.')
+  let re = /^[A-Za-z ]+$/
+  if (!re.test(name)) {
+    alert('Please enter proper your name.')
     isValid = false
   } else if (phonenumber === '') {
     alert('Please fill your phonenumber')
@@ -137,13 +138,11 @@ const Types = [
 ]
 
 const Notes = [
-  'બોલી:૫૦૦/- ના ગુણાંકમાં રકમ dropdown ભરવી દાખલા તરીકે ૩૦૦૦,૩૫૦૦,૪૦૦૦...,૧૦૦૦૦,૧૦૫૦૦',
-  'સવારના ૯.૦૦ વાગ્યાથી રાત્રે ૯.૦૦  વાગ્યા સુધી બોલી ભરી શકાશે.',
-  'બોલી સબમિટ થઇ એટલે SMS માં આવેલો OTP લખવો અને ત્યારબાદ કોન્ફીર્મ સબમિટ કરવું',
-  '#By Jinal Shah'
+  'બોલી:૫૦૦/- ના ગુણાંકમાં રકમ ભરવી દાખલા તરીકે ૩૦૦૦,૩૫૦૦,૪૦૦૦...,૧૦૦૦૦,૧૦૫૦૦',
+  'OTP સબમીટ કરતા પહેલા બોલીની રકમ અને ફોન નંબર ધ્યાનથી વાંચવો.',
 ]
 
-const sendSMS = (OTP, phonenumber, callback) => {
+const sendSMS = (OTP, phonenumber, callback, failCallback) => {
   return new Promise((resolve, reject) => {
     return axios.get(`https://2factor.in/API/V1/1c34d19e-db07-11ea-9fa5-0200cd936042/SMS/+91${phonenumber}/${OTP}/boli_app`)
       .then(res => {
@@ -151,6 +150,8 @@ const sendSMS = (OTP, phonenumber, callback) => {
         console.log(`OTP ${OTP} is sent to phonenumber ${phonenumber}`)
       })
       .catch(err => {
+        alert(`We are not able to send OTP to ${phonenumber}. Please check phone number again.`)
+        failCallback()
         console.log(`FAIL: OTP ${OTP} is not sent to phonenumber ${phonenumber}`, err.toString())
       })
   })

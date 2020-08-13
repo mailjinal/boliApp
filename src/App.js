@@ -25,12 +25,15 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
   table: {
   },
+  copyrightText: {
+    fontWeight: "bold"
+  }
 }));
 
 function App() {
@@ -42,6 +45,9 @@ function App() {
   const [type, setType] = React.useState('');
   const [data, setData] = React.useState([]);
   const [fullData, setFullData] = React.useState([])
+  const [isOTPShow, setisOTPShow] = React.useState(false)
+  const [OTP, setOTP] = React.useState('')
+  const [confirmOTP, setConfirmOTP] = React.useState('')
   const classes = useStyles();
 
   const handleListFilterChanges = (updatedList) => {
@@ -81,22 +87,38 @@ function App() {
     if (validateUser(name, phoneNumber, parseInt(amount), type, minAmount, day)) {
       const OTP = phoneNumber.slice(-2) + Date.now().toString().slice(-2);
       console.log(OTP)
+      setConfirmOTP(OTP)
       // eslint-disable-next-line no-restricted-globals
-      const responseConfirm = confirm(`Do you want to add boli for Rs. ${amount}`);
+      const responseConfirm = confirm(`Do you want to add boli for Rs. ${amount}? If you press OK, OTP will be sent to your phone number : ${phoneNumber}`);
       if (responseConfirm) {
         sendSMS(OTP, phoneNumber, () => {
-          let responseOTP = prompt(`Please enter OTP sent to your phoneNumber : ${phoneNumber}.`, '')
-          if (responseOTP === OTP) {
-            writeUserData(name, phoneNumber, parseInt(amount), day, type)
-            setName('')
-            setPhoneNumber('')
-          } else {
-            alert('Please fill your latest OTP.')
-          }
+          setisOTPShow(true)
+        },() => {
+          setPhoneNumber('')
         })
-        
+      } else {
+        setAmount(minAmount)
+        setConfirmOTP('')
       }
-    } else { setAmount(minAmount) }
+    } else {
+      setAmount(minAmount)
+    }
+  }
+
+  const submitOTP = () => {
+    if (confirmOTP === OTP) {
+      writeUserData(name, phoneNumber, parseInt(amount), day, type)
+      setName('')
+      setPhoneNumber('')
+    } else {
+      alert('Please re-enter boli with latest OTP.')
+      setName('')
+      setPhoneNumber('')
+    }
+    setisOTPShow(false)
+    setOTP('')
+    setConfirmOTP('')
+    
   }
 
   React.useEffect(() => {
@@ -113,10 +135,11 @@ function App() {
       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <input id={'dayid'} style={{ display: 'none' }} value={day} readOnly/>
-            <input id={'typeid'} style={{ display: 'none' }} value={type} readOnly/>
-            <img src={Logo} alt='chandraprabhuImge' style={{ width: '80%', height: '20%' }} />
+            <input id={'dayid'} style={{ display: 'none' }} value={day} readOnly />
+            <input id={'typeid'} style={{ display: 'none' }} value={type} readOnly />
+            <img src={Logo} alt='chandraprabhuImge' style={{ width: '60%', height: '10%' }} />
             <h3>ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
+            {Notes.map((text, i) => <p key={i}>{text}</p>)}
             <Grid item xs={12} sm={12}>
               <TextField
                 id="standard-basic"
@@ -181,7 +204,22 @@ function App() {
                 Boli
                 </Button>
             </Grid>
-            {Notes.map((text,i) => <p key={i}>{text}</p>)}
+            {isOTPShow && <Grid item xs={12} sm={12} style={{ padding: 10 }}>
+              <TextField id="standard-basic"
+                type='number'
+                value={OTP}
+                onChange={(e) => setOTP(e.target.value)}
+                label="OTP" />
+              <Button
+                style={{ margin: 10 }}
+                // disabled={moment().hour() > 21 || moment().hour() < 9}
+                variant="contained"
+                color="primary"
+                onClick={() => { submitOTP() }}>
+                Submit OTP
+                </Button>
+            </Grid>}
+              <p className={classes.copyrightText}>{'#By Jinal Shah'}</p>
           </Paper>
         </Grid>
       </Grid>
