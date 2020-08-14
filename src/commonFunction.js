@@ -3,11 +3,11 @@ import axios from 'axios';
 const validateUser = (name, phonenumber, amount, type, minAmount, day) => {
   let isValid = true;
   let re = /^[A-Za-z ]+$/
-  if (!re.test(name)) {
-    alert('Please enter proper your name.')
+  if ((!re.test(name)) || name.length <= 3) {
+    alert('Please enter proper your name.(Minimun 3 character, No special character and Numbers!!)')
     isValid = false
   } else if (phonenumber === '') {
-    alert('Please fill your phonenumber')
+    alert('Please fill your phonenumber(No Alphabates!)')
     isValid = false
   } else if (phonenumber.length !== 10) {
     alert('please enter your mobile number in 10 digit')
@@ -139,6 +139,7 @@ const Types = [
 
 const Notes = [
   'બોલી:૫૦૦/- ના ગુણાંકમાં રકમ ભરવી દાખલા તરીકે ૩૦૦૦,૩૫૦૦,૪૦૦૦...,૧૦૦૦૦,૧૦૫૦૦',
+  'નામ અને અટક અંગ્રેજીમાં લખવું.',
   'OTP સબમીટ કરતા પહેલા બોલીની રકમ અને ફોન નંબર ધ્યાનથી વાંચવો.',
 ]
 

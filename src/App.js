@@ -29,10 +29,16 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-  table: {
+  templeName: {
+    color: 'red'
   },
   copyrightText: {
     fontWeight: "bold"
+  },
+  copyrightText1: {
+    fontWeight: "bold",
+    textAlign: 'right',
+    color: theme.palette.text.secondary,
   }
 }));
 
@@ -138,7 +144,7 @@ function App() {
             <input id={'dayid'} style={{ display: 'none' }} value={day} readOnly />
             <input id={'typeid'} style={{ display: 'none' }} value={type} readOnly />
             <img src={Logo} alt='chandraprabhuImge' style={{ width: '60%', height: '10%' }} />
-            <h3>ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
+            <h3 className={classes.templeName}>ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
             {Notes.map((text, i) => <p key={i}>{text}</p>)}
             <Grid item xs={12} sm={12}>
               <TextField
@@ -219,8 +225,9 @@ function App() {
                 Submit OTP
                 </Button>
             </Grid>}
-              <p className={classes.copyrightText}>{'#By Jinal Shah'}</p>
-          </Paper>
+              <p className={classes.copyrightText}>{'આભાર ટ્રસ્ટીગણ'}</p>
+                        </Paper>
+          <p className={classes.copyrightText1}>{'#By Jinal Shah'}</p>
         </Grid>
       </Grid>
     </div>

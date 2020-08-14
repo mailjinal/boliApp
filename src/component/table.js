@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
   },
+  tableCellHighlight: {
+    color:'green'
+  }
 }));
 
 function TableComponent(props) {
@@ -40,9 +43,9 @@ function TableComponent(props) {
         <TableBody>
           {props.tableData.map((row, i) => {
            return <TableRow key={i}>
-              <TableCell align="center">{row.date}</TableCell>
-              <TableCell align="center">{`${row.name} / ${row.phoneNumber}`}</TableCell>
-              <TableCell align="center">{row.amount}</TableCell>
+              <TableCell className={i === 0? classes.tableCellHighlight : ''} align="center">{row.date}</TableCell>
+              <TableCell className={i === 0? classes.tableCellHighlight : ''} align="center">{`${row.name} / ${row.phoneNumber}`}</TableCell>
+              <TableCell className={i === 0? classes.tableCellHighlight : ''} align="center">{row.amount}</TableCell>
             </TableRow>
           })}
         </TableBody>
