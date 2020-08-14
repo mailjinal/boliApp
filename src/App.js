@@ -144,7 +144,7 @@ function App() {
             <input id={'dayid'} style={{ display: 'none' }} value={day} readOnly />
             <input id={'typeid'} style={{ display: 'none' }} value={type} readOnly />
             <img src={Logo} alt='chandraprabhuImge' style={{ width: '60%', height: '10%' }} />
-            <h3 className={classes.templeName}>ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
+            <h3 className={classes.templeName}>શ્રી ચંદ્રપ્રભુ દિગમ્બર જૈન મંદિર,ગોપીપુરા,સુરત</h3>
             {Notes.map((text, i) => <p key={i}>{text}</p>)}
             <Grid item xs={12} sm={12}>
               <TextField
