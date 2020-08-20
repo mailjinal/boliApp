@@ -99,7 +99,7 @@ function App() {
       if (responseConfirm) {
         sendSMS(OTP, phoneNumber, () => {
           setisOTPShow(true)
-        },() => {
+        }, () => {
           setPhoneNumber('')
         })
       } else {
@@ -124,7 +124,7 @@ function App() {
     setisOTPShow(false)
     setOTP('')
     setConfirmOTP('')
-    
+
   }
 
   React.useEffect(() => {
@@ -134,7 +134,9 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const filterDay = days.filter(d => moment().add(1, 'days').isBefore(moment(d.date, 'DD/MM/YYYY')))
+  const filterDay = days
+    .filter(d => moment().isSame(moment(d.date, 'DD/MM/YYYY'), 'day')
+    )
 
   return (
     <div className={classes.root}>
@@ -218,15 +220,15 @@ function App() {
                 label="OTP" />
               <Button
                 style={{ margin: 10 }}
-                // disabled={moment().hour() > 21 || moment().hour() < 9}
+                disabled={moment().hour() < 7}
                 variant="contained"
                 color="primary"
                 onClick={() => { submitOTP() }}>
                 Submit OTP
                 </Button>
             </Grid>}
-              <p className={classes.copyrightText}>{'આભાર ટ્રસ્ટીગણ'}</p>
-                        </Paper>
+            <p className={classes.copyrightText}>{'આભાર ટ્રસ્ટીગણ'}</p>
+          </Paper>
           <p className={classes.copyrightText1}>{'#By Jinal Shah'}</p>
         </Grid>
       </Grid>
