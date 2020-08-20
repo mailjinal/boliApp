@@ -205,7 +205,7 @@ function App() {
                 label="Amount" />
               <Button
                 style={{ margin: 10 }}
-                // disabled={moment().hour() > 21 || moment().hour() < 9}
+                disabled={moment().hour() < 7}
                 variant="contained"
                 color="primary"
                 onClick={() => { submitBoli() }}>
@@ -220,7 +220,6 @@ function App() {
                 label="OTP" />
               <Button
                 style={{ margin: 10 }}
-                disabled={moment().hour() < 7}
                 variant="contained"
                 color="primary"
                 onClick={() => { submitOTP() }}>
