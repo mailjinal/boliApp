@@ -134,9 +134,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const filterDay = days
-    .filter(d => moment().isSame(moment(d.date, 'DD/MM/YYYY'), 'day')
-    )
+  const filterDay = days.filter(d => moment().add(1, 'days').isBefore(moment(d.date, 'DD/MM/YYYY')))
 
   return (
     <div className={classes.root}>
