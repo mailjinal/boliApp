@@ -9,7 +9,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import TableComponent from './component/table'
+import TableComponent from './component/table';
+import Leaderboard from './component/leaderboard'
 import { writeUserData, getUserData } from './firebaseConfig/firebase'
 import _ from 'lodash'
 import Logo from './img/abc.jpeg';
@@ -134,7 +135,8 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const filterDay = days.filter(d => moment().add(1, 'days').isBefore(moment(d.date, 'DD/MM/YYYY')))
+  const filterDay = days
+  .filter(d => moment().add(1, 'days').isBefore(moment(d.date, 'DD/MM/YYYY')))
 
   return (
     <div className={classes.root}>
@@ -224,6 +226,9 @@ function App() {
                 Submit OTP
                 </Button>
             </Grid>}
+            <Grid item xs={12} sm={12}>
+              <Leaderboard tableData={fullData} />
+            </Grid>
             <p className={classes.copyrightText}>{'આભાર ટ્રસ્ટીગણ'}</p>
           </Paper>
           <p className={classes.copyrightText1}>{'#By Jinal Shah'}</p>
