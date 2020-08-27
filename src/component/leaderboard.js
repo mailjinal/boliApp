@@ -48,6 +48,16 @@ function LeaderComponent(props) {
 
     }
   })
+  finalList.reverse()
+  //4 
+  if(finalList.length > 5){
+    const a = finalList[4];
+    const b = finalList[0]
+    finalList[4] = b
+    finalList[0] = a
+    console.log(finalList)
+  }
+  
   return (
     <TableContainer component={Paper}>
       <h3>હાલના દાતાઓ</h3>
